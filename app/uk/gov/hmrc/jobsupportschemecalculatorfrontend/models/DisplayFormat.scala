@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.jobsupportschemecalculatorfrontend.config
+package uk.gov.hmrc.jobsupportschemecalculatorfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+sealed trait DisplayFormat extends Product with Serializable
 
-@Singleton
-class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-  val s                            = servicesConfig.baseUrl("")
-
+object DisplayFormat {
+  case object Block extends DisplayFormat
+  case object Line extends DisplayFormat
 }

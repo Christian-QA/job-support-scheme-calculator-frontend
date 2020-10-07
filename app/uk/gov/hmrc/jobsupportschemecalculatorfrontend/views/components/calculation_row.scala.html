@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.jobsupportschemecalculatorfrontend.config
+@import play.api.i18n.Messages
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+@import uk.gov.hmrc.jobsupportschemecalculatorfrontend.models.finance.MoneyUtils
+@import uk.gov.hmrc.jobsupportschemecalculatorfrontend.models.finance.AmountInPence
 
-@Singleton
-class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-  val s                            = servicesConfig.baseUrl("")
+@this()
 
-}
+@(total: AmountInPence, label: String, showGainType: Boolean)(implicit messages: Messages)
+
+<h2 class="heading-medium">
+ @label
+</h2>
+<span class="calc-total">
+  @{MoneyUtils.formatAmountOfMoneyWithPoundSign(total.abs().inPounds())}
+ @if(showGainType) {
+  @{if (total.isNegative) s"(${messages("generic.loss")})" else if (!total.isZero) s"(${messages("generic.gain")})"}
+ }
+</span>

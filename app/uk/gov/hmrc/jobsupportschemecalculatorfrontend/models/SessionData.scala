@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.jobsupportschemecalculatorfrontend.config
+package uk.gov.hmrc.jobsupportschemecalculatorfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import cats.Eq
+import play.api.libs.json.{Format, Json}
 
-@Singleton
-class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-  val s                            = servicesConfig.baseUrl("")
+final case class SessionData(
+  journeyStatus: Option[String], //TODO: build in model for journey
+  userType: Option[UserType]
+)
+
+object SessionData {
+
+  implicit val format: Format[SessionData] = Json.format
+
+  implicit val eq: Eq[SessionData] = Eq.fromUniversalEquals[SessionData]
+
+  val empty: SessionData = SessionData(None, None)
 
 }

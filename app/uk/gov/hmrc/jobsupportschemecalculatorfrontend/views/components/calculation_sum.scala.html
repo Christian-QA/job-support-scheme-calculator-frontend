@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.jobsupportschemecalculatorfrontend.config
+@import uk.gov.hmrc.jobsupportschemecalculatorfrontend.views.components.SumPartDisplay
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+@this(
+  sumPart: uk.gov.hmrc.jobsupportschemecalculatorfrontend.views.html.components.calculation_sum_part
+)
 
-@Singleton
-class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-  val s                            = servicesConfig.baseUrl("")
+@(parts: List[SumPartDisplay], total: SumPartDisplay)
 
-}
+  <dl class="govuk-check-your-answers cya-questions-long">
+    @{ parts.map(sumPart(_)) }
+    @{ sumPart(total) }
+  </dl>

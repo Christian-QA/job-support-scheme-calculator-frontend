@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.jobsupportschemecalculatorfrontend.config
+package uk.gov.hmrc.jobsupportschemecalculatorfrontend.util
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.api.Logger
+import uk.gov.hmrc.jobsupportschemecalculatorfrontend.models.Error
 
-@Singleton
-class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-  val s                            = servicesConfig.baseUrl("")
+trait Logging {
+
+  val logger: Logger = Logger(this.getClass)
+
+}
+
+object Logging {
+
+  implicit class LoggerOps(private val l: Logger) extends AnyVal {
+    def warn(msg: => String, e: => Error): Unit =
+      e.value.fold(e => l.warn(s"$msg: $e"), e => l.warn(msg, e))
+
+  }
 
 }

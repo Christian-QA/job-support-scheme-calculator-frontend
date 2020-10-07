@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.jobsupportschemecalculatorfrontend.config
+package uk.gov.hmrc.jobsupportschemecalculatorfrontend.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+final case class Error(value: Either[String, Throwable]) extends AnyVal
 
-@Singleton
-class AppConfig @Inject() (config: Configuration, servicesConfig: ServicesConfig) {
-  val footerLinkItems: Seq[String] = config.getOptional[Seq[String]]("footerLinkItems").getOrElse(Seq())
-  val s                            = servicesConfig.baseUrl("")
+object Error {
+
+  def apply(message: String): Error = Error(Left(message))
+
+  def apply(error: Throwable): Error = Error(Right(error))
 
 }
